@@ -1,0 +1,19 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: Actualizacion de repository index
+    apt:
+      update_cache: yes
+
+  - name: Desinstalando Apache
+    apt:
+      name: apache2
+      state: absent
+
+  - name: Desinstalando PHP_Support para Apache
+    apt:
+      name: libapache2-mod-php
+      state: absent
