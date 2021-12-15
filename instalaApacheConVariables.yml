@@ -1,0 +1,13 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: Actualiza IndexRepo e Instala HTTP Server y PaquetesPHP
+    package:
+      name:
+        - "{{ paquete_apache }}"
+        - "{{ paquete_php }}"
+      state: latest
+      update_cache: yes
