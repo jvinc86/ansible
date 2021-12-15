@@ -50,6 +50,26 @@
       group: root
       mode: 0644
 
+- hosts: workstations
+  become: true
+  tasks:
+
+    - name: Instalacion de Unzip
+      tags: workstations,pcs
+      package:
+        name: unzip
+
+    - name: Instalacion de Terraform
+      tags: workstations,pcs
+      unarchive:
+        src: https://releases.hashicorp.com/terraform/1.1.0/terraform_1.1.0_linux_amd64.zip
+        dest: /usr/local/bin
+        remote_src: yes
+        mode: 0755
+        owner: root
+        group: root
+
+
 - hosts: db_servers
   become: true
   tasks:
