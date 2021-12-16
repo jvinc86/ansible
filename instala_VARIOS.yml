@@ -41,6 +41,30 @@
       state: latest
     when: ansible_distribution == "CentOS"
 
+  - name: Inicia el servicio httpd (CentOS)
+    tags: apache,centos,httpd
+    service:
+      name: httpd
+      state: started
+      enabled: yes
+    when: ansible_distribution == "CentOS"
+
+  - name: Cambia email_admin en congifFile httpd (CentOS)
+    tags: apache,centos,httpd
+    lineinfile:
+      path: /etc/httpd/conf/httpd.conf
+      regexp: '^ServerAdmin'
+      line: ServerAdmin jvincent.camacho@gmail.com
+    when: ansible_distribution == "CentOS"
+    register: estado_de_httpd
+
+  - name: Reinicia servicio httpd (CentOS)
+    tags: apache,centos,httpd
+    service:
+      name: httpd
+      state: restarted
+    when: estado_de_httpd.changed
+
   - name: copy default html file for site
     tags: apache,apache2,httpd
     copy:
