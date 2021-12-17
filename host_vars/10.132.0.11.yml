@@ -1,0 +1,3 @@
+paquete_apache: apache2
+servicio_apache: apache2
+paquete_php: libapache2-mod-php

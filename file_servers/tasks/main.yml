@@ -1,0 +1,5 @@
+- name: Instala Samba tanto en Ubuntu como CentOS
+  tags: samba
+  package:
+    name: samba
+    state: latest

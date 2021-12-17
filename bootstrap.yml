@@ -1,0 +1,44 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: Instala actualizaciones (CentOS)
+    tags: always
+    dnf:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution == "CentOS"
+
+  - name: Instala actualizaciones (Ubuntu)
+    tags: always
+    apt: 
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+- hosts: all
+  become: true
+  tasks:
+
+    - name: Crear usuario vincenup
+      tags: always
+      user:
+        name: vincenup
+        groups: root
+
+    - name: Agrega SHH key para vincenup
+      tags: always
+      authorized_key:
+        user: vincenup
+        key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJG7tNlHbOmGPSChDf8HTQPl9IuiIo2mg2C7evWMAs5E Ansible"
+
+    - name: Agrega archivo sudoer para vincenup                      
+      tags: always
+      copy:
+        src: sudoer_vincenup
+        dest: /etc/sudoers.d/vincenup
+        owner: root
+        group: root
+        mode: 0440

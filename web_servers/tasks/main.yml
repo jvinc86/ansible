@@ -1,0 +1,39 @@
+- name: Instala Apache y PHP
+  tags: apache,apache2,httpd,php
+  package:
+    name:
+      - "{{ paquete_apache }}"
+      - "{{ paquete_php }}"
+    state: latest
+
+- name: Inicia el servicio apache/httpd
+  tags: apache,httpd
+  service:
+    name: "{{ servicio_apache }}"
+    state: started
+    enabled: yes
+
+- name: Cambia email_admin en congifFile httpd (CentOS)
+  tags: apache,centos,httpd
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '^ServerAdmin'
+    line: ServerAdmin jvincent.camacho@gmail.com
+  when: ansible_distribution == "CentOS"
+  register: estado_de_apache
+
+- name: Reinicia servicio httpd (CentOS)
+  tags: apache,httpd
+  service:
+    name: "{{ servicio_apache }}"
+    state: restarted
+  when: estado_de_apache.changed
+
+- name: Copia mi html a la carpeta del sitioweb
+  tags: apache,apache2,httpd
+  copy:
+    src: mi_website.html
+    dest: /var/www/html/index.html
+    owner: root
+    group: root
+    mode: 0644

@@ -4,20 +4,29 @@
   become: true
   pre_tasks:
 
-  - name: Instala actualizaciones (CentOS)
+  - name: Actualiza el cache del repo (CentOS)
     tags: always
     dnf:
-      update_only: yes
       update_cache: yes
+    changed_when: false
     when: ansible_distribution == "CentOS"
 
-  - name: Instala actualizaciones (Ubuntu)
+  - name: Actualiza el cache del repo (Ubuntu)
     tags: always
     apt: 
-      upgrade: dist
       update_cache: yes
+    changed_when: false
     when: ansible_distribution == "Ubuntu"
 
+- hosts: all
+  become: true
+  tasks:
+
+    - name: Agrega SHH key para vincenup
+      tags: always,usuarioroot
+      authorized_key:
+        user: vincenup
+        key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJG7tNlHbOmGPSChDf8HTQPl9IuiIo2mg2C7evWMAs5E Ansible"
 
 - hosts: web_servers
   become: true
@@ -68,7 +77,7 @@
   - name: copy default html file for site
     tags: apache,apache2,httpd
     copy:
-      src: archivos/mi_website.html
+      src: web_servers/files/mi_website.html
       dest: /var/www/html/index.html
       owner: root
       group: root

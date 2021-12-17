@@ -1,0 +1,5 @@
+- name: Agrega SHH key para vincenup
+  tags: always,usuarioroot
+  authorized_key:
+    user: vincenup
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJG7tNlHbOmGPSChDf8HTQPl9IuiIo2mg2C7evWMAs5E Ansible"
